@@ -23,7 +23,7 @@ export const register = async (
     const user = new User({ name, email, password });
     await user.save();
 
-    const payload = { id: user._id, email: user.email };
+    const payload = { id: user._id, email: user.email,isAdmin:user.isAdmin };
     const options: SignOptions = { expiresIn: JWT_EXPIRES_IN };
     const token = jwt.sign(payload, JWT_SECRET, options);
 
@@ -50,7 +50,7 @@ export const login = async (
     const match = await user.comparePassword(password);
     if (!match) return res.status(401).json({ message: "Invalid credentials" });
 
-    const payload = { id: user._id, email: user.email };
+    const payload = { id: user._id, email: user.email,isAdmin:user.isAdmin };
     const options: SignOptions = { expiresIn: JWT_EXPIRES_IN };
     const token = jwt.sign(payload, JWT_SECRET, options);
 

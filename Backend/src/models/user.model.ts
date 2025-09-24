@@ -9,9 +9,9 @@ export interface IUser extends Document {
   name?: string;
   email: string;
   password: string;
+  isAdmin: boolean;
   comparePassword(candidate: string): Promise<boolean>;
 }
-
 const userSchema = new mongoose.Schema(
   {
     name: { type: String },
@@ -23,9 +23,11 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
     password: { type: String, required: true },
+    isAdmin: { type: Boolean, default: false }, 
   },
   { timestamps: true }
 );
+
 
 userSchema.pre<IUser>("save", async function (next) {
   if (!this.isModified("password")) return next();

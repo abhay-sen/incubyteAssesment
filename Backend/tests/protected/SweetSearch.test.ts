@@ -6,11 +6,12 @@ import jwt from "jsonwebtoken";
 import Sweets from "../../src/models/sweets.model";
 
 const JWT_SECRET = process.env.JWT_SECRET || "testsecret";
+const MONGO_URI_TEST= process.env.MONGO_URI_TEST || "mongodb://127.0.0.1:27017/tdd_test";
 const generateToken = (payload = { id: "user1", email: "test@example.com" }) =>
   jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
 beforeAll(async () => {
-  await mongoose.connect("mongodb://127.0.0.1:27017/tdd_test");
+  await mongoose.connect(MONGO_URI_TEST);
 });
 
 afterEach(async () => {
