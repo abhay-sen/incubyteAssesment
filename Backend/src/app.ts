@@ -9,7 +9,7 @@ const app = express();
 
 app.use(express.json());
 app.use("/api/auth", authRouter);
-app.use("/api/protected",protectedRouter);
+app.use("/api/sweets",protectedRouter);
 // global error handler
 app.use(errorHandler);
 
