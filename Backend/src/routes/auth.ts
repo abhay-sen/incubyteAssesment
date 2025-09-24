@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register } from "../controllers/auth.controller";
+import { register, login } from "../controllers/auth.controller";
 import { body } from "express-validator";
 import { validationMiddleware } from "../middleware/validate";
 
@@ -14,10 +14,20 @@ router.post(
       .withMessage("Password must be at least 8 characters")
       .matches(/[!@#$%^&*(),.?":{}|<>]/)
       .withMessage("Password must contain at least one special character"),
-    body("name").isString().trim().isLength({ min: 1, max: 100 }),
+    body("name").optional().isString().trim().isLength({ min: 1, max: 100 }),
   ],
   validationMiddleware,
   register
+);
+
+router.post(
+  "/login",
+  [
+    body("email").isEmail().withMessage("Email must be valid"),
+    body("password").isString().notEmpty().withMessage("Password is required"),
+  ],
+  validationMiddleware,
+  login
 );
 
 export default router;

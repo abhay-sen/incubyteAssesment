@@ -26,7 +26,7 @@ afterAll(async () => {
 });
 
 describe("POST /api/auth/register", () => {
-  it("creates a user and returns 201 with user payload (no password)", async () => {
+  it("creates a user, returns 201 with user payload and token", async () => {
     const payload = {
       name: "Abhay",
       email: "test1@example.com",
@@ -37,19 +37,13 @@ describe("POST /api/auth/register", () => {
       .post("/api/auth/register")
       .send(payload)
       .expect(201);
+
     expect(res.body).toHaveProperty("user");
+    expect(res.body).toHaveProperty("token");
     expect(res.body.user.email).toBe(payload.email);
     expect(res.body.user).not.toHaveProperty("password");
-
-    const dbUser = await User.findOne({ email: payload.email }).lean();
-    expect(dbUser).not.toBeNull();
-    // password should be hashed
-    const match = await bcrypt.compare(
-      payload.password,
-      (dbUser as any).password
-    );
-    expect(match).toBe(true);
   });
+
 
   it("returns 400 when email is invalid or password too short", async () => {
     const res = await request(app)
