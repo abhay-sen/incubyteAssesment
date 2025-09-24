@@ -35,7 +35,7 @@ describe("DELETE /api/sweets/:id - delete sweet", () => {
       quantity_in_stock: 20,
       createdBy: { id: "user1" },
     }) as mongoose.Document & { _id: mongoose.Types.ObjectId };
-        sweetId = sweet._id.toString();;
+        sweetId = sweet._id.toString();
   });
 
   it("should delete sweet successfully for admin user", async () => {
