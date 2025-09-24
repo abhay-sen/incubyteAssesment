@@ -12,11 +12,11 @@ const createSweet = async (req: AuthRequest, res: Response) => {
             return res.status(409).json({message: "Sweet with the same name and category already exists"});
         }
         const sweet = new Sweets({ name, category, price, quantity_in_stock, createdBy: req.user });
-        await sweet.save();
+        const savedSweet = await sweet.save();
         
         return res.json({
           message: "Sweet created successfully",
-          sweet: { name, category, price, quantity_in_stock, createdBy: req.user },
+          sweet: savedSweet,
         });
     }catch(err){
         res.status(500).json({message: "Internal Server Error"})

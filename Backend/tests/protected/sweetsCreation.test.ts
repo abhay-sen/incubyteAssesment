@@ -4,7 +4,7 @@ import app from "../../src/app"; // your express app
 import jwt from "jsonwebtoken";
 import Sweets from "../../src/models/sweets.model";
 const JWT_SECRET = process.env.JWT_SECRET || "testsecret";
-
+const MONGO_URI_TEST = process.env.MONGO_URI_TEST || "mongodb://localhost:27017/test";
 // Helper function to create JWT token
 const generateToken = (
   payload = { id: "12345", email: "test@example.com" }
@@ -13,7 +13,7 @@ const generateToken = (
 };
 
 beforeAll(async () => {
-  await mongoose.connect("mongodb://127.0.0.1:27017/tdd_test");
+  await mongoose.connect(MONGO_URI_TEST);
 });
 
 afterEach(async () => {
@@ -44,7 +44,6 @@ describe("POST /api/sweets/", () => {
       .set("Authorization", `Bearer ${token}`)
       .send(payload)
       .expect(200);
-
     expect(res.body).toHaveProperty("message", "Sweet created successfully");
     expect(res.body).toHaveProperty("sweet");
     expect(res.body.sweet.name).toBe(payload.name);
