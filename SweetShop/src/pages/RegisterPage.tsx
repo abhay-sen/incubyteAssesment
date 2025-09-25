@@ -1,6 +1,8 @@
 import React, { useState} from "react";
 import type { FormEvent } from "react";
-
+import { useAppDispatch } from "../store/hooks";
+import registerUser from "../store/auth/register/thunk";
+import { useNavigate } from "react-router";
 // Define the shape of the props the component expects
 
 
@@ -17,22 +19,40 @@ const RegisterPage: React.FC = () => {
   // Determine if the register button should be disabled
   const isButtonDisabled = !name || !email || !password || !confirmPassword;
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    // Prevent the default browser form submission behavior
+  // importing dispatch
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // 1. Check if passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match");
-      return; // Stop the submission
+      return;
     }
-
-    // 2. Clear any previous errors
     setError("");
 
-    // 3. Call the onRegister callback with the user data
-    console.log({name, email, password});
+    try {
+      const resultAction = await dispatch(
+        registerUser({ name, email, password })
+      );
+
+      if (registerUser.fulfilled.match(resultAction)) {
+        // Registration succeeded
+        console.log("Registration successful!");
+        navigate("/"); // redirect to home page
+      } else {
+        // Registration failed
+        setError(
+          typeof resultAction.payload === "string"
+            ? resultAction.payload
+            : "Registration failed"
+        );
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    }
   };
+
 
   return (
     <div
