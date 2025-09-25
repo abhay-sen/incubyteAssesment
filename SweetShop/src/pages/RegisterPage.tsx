@@ -25,12 +25,36 @@ const RegisterPage: React.FC = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    // 1. Email validation using a regular expression
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    // 2. Password validation: minimum 8 characters
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long.");
+      return;
+    }
+
+    // 3. Password validation: at least one special character
+    const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+    if (!specialCharRegex.test(password)) {
+      setError("Password must contain at least one special character.");
+      return;
+    }
+
+    // 4. Check if passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
+
+    // If all checks pass, clear any previous errors
     setError("");
 
+    // Proceed with the registration logic
     try {
       const resultAction = await dispatch(
         registerUser({ name, email, password })
