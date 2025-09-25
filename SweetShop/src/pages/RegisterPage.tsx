@@ -2,11 +2,9 @@ import React, { useState} from "react";
 import type { FormEvent } from "react";
 
 // Define the shape of the props the component expects
-interface RegisterPageProps {
-  onRegister: (data: { name: string; email: string; password: string }) => void;
-}
 
-const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister }) => {
+
+const RegisterPage: React.FC = () => {
   // State for each form field
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -33,7 +31,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onRegister }) => {
     setError("");
 
     // 3. Call the onRegister callback with the user data
-    onRegister({ name, email, password });
+    console.log({name, email, password});
   };
 
   return (
