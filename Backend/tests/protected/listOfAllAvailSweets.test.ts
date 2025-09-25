@@ -12,23 +12,7 @@ const generateToken = (
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 };
 
-const MONGO_URI_TEST = process.env.MONGO_URI_TEST || "mongodb://localhost:27017/test";
 
-beforeAll(async () => {
-  await mongoose.connect(MONGO_URI_TEST);
-});
-
-afterEach(async () => {
-  // clean up database if needed
-  const collections = Object.keys(mongoose.connection.collections);
-  for (const name of collections) {
-    await mongoose.connection.collections[name].deleteMany({});
-  }
-});
-
-afterAll(async () => {
-  await mongoose.disconnect();
-});
 
 describe("POST /api/sweets/", () => {
     it("should get all sweets successfully with valid token", async () => {

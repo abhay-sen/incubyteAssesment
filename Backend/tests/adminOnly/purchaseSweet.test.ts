@@ -12,17 +12,7 @@ const generateToken = (
 const MONGO_URI_TEST =
   process.env.MONGO_URI_TEST || "mongodb://127.0.0.1:27017/tdd_test";
 
-beforeAll(async () => {
-  await mongoose.connect(MONGO_URI_TEST);
-});
 
-afterEach(async () => {
-  await Sweets.deleteMany({});
-});
-
-afterAll(async () => {
-  await mongoose.disconnect();
-});
 
 describe("POST /api/sweets/:id/purchase - purchase sweet", () => {
   let sweetId: string;

@@ -8,21 +8,7 @@ dotenv.config();
 const TEST_DB =
   process.env.MONGO_URI_TEST || "mongodb://127.0.0.1:27017/tdd_register_test";
 
-beforeAll(async () => {
-  await mongoose.connect(TEST_DB);
-});
 
-afterEach(async () => {
-  // clear all collections
-  const collections = Object.keys(mongoose.connection.collections);
-  for (const name of collections) {
-    await mongoose.connection.collections[name].deleteMany({});
-  }
-});
-
-afterAll(async () => {
-  await mongoose.disconnect();
-});
 
 describe("POST /api/auth/login", () => {
   it("logs in a user with valid credentials and returns JWT", async () => {

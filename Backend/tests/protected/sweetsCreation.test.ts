@@ -4,7 +4,6 @@ import app from "../../src/app"; // your express app
 import jwt from "jsonwebtoken";
 import Sweets from "../../src/models/sweets.model";
 const JWT_SECRET = process.env.JWT_SECRET || "testsecret";
-const MONGO_URI_TEST = process.env.MONGO_URI_TEST || "mongodb://localhost:27017/test";
 // Helper function to create JWT token
 const generateToken = (
   payload = { id: "12345", email: "test@example.com" }
@@ -12,21 +11,7 @@ const generateToken = (
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 };
 
-beforeAll(async () => {
-  await mongoose.connect(MONGO_URI_TEST);
-});
 
-afterEach(async () => {
-  // clean up database if needed
-  const collections = Object.keys(mongoose.connection.collections);
-  for (const name of collections) {
-    await mongoose.connection.collections[name].deleteMany({});
-  }
-});
-
-afterAll(async () => {
-  await mongoose.disconnect();
-});
 
 describe("POST /api/sweets/", () => {
   it("should create sweet successfully with valid token and body", async () => {
